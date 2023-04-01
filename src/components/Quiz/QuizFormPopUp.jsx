@@ -1,9 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
 
     const [quizData, setQuizData] = useState({
+        id : uuidv4(),
         quizName : '',
         description : '',
         pointsGradingSystem : '',
@@ -18,12 +20,14 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
     const submit = () => {
         console.log(quizData);
         setQuizData({
+            id : '',
             quizName : '',
             description : '',
             pointsGradingSystem : '',
             timeLimit : ''
         });
-        localStorage.setItem('quizData', JSON.stringify(quizData));
+        const storedFormData = JSON.parse(localStorage.getItem('quizData')) || [];
+            localStorage.setItem('quizData', JSON.stringify([...storedFormData, quizData]));
       };
 
     //   useEffect(() => {
@@ -101,14 +105,14 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="points-grading-system">
-                            Points/Grading System
+                            Points
                             </label>
                             <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             id="points-grading-system"
-                            type="text"
+                            type="number"
                             name='pointsGradingSystem'
-                            placeholder="Enter points/grading system"
+                            placeholder="Enter total points"
                             value={quizData.pointsGradingSystem}
                             onChange={handleSubmit}
                             />

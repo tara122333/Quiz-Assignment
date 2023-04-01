@@ -8,6 +8,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Quiz />} />
+      <Route path="/quiz/:_id" element={<Quiz />} />
     </Routes>
   );
 }
