@@ -15,6 +15,7 @@ const QuizPoster = (props) => {
         window.location.reload(true); 
       };
 
+
   return (
     <>
         <QuizFormPopUp isOpen={quizFormOpen} setIsOpen={setQuizFormOpen} />
@@ -26,9 +27,9 @@ const QuizPoster = (props) => {
                         </h1>
                     </div>
                     <div className='flex gap-2 justify-center items-center px-2 lg:px-4'>
-                        <span className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' onClick={quizFormOpenModel}>
+                        <Link to={`/edit/${props.id}`} target='_blank' className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
                             <MdOutlineEdit className='text-2xl hover:scale-125 duration-500'/>
-                        </span>
+                        </Link>
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' 
                         onClick={() => quizDelete(props.id)}
                         >
