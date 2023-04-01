@@ -1,10 +1,14 @@
+// import Libraries
+import { Route,Routes } from "react-router-dom";
+
 // import Components
-import Navbar from "./components/Navbar/Navbar";
+import Quiz from "./components/Quiz/Quiz";
+
 function App() {
   return (
-    <div className="bg-red-500">
-      <Navbar />
-    </div>
+    <Routes>
+      <Route path="/" element={<Quiz />} />
+    </Routes>
   );
 }
 
