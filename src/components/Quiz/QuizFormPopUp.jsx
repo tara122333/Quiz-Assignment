@@ -9,7 +9,8 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
         quizName : '',
         description : '',
         pointsGradingSystem : '',
-        timeLimit : ''
+        timeLimit : '',
+        question : [],
     });
 
     const handleSubmit = (e) => {
@@ -18,13 +19,14 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
     };
 
     const submit = () => {
-        console.log(quizData);
+        // console.log(quizData);
         setQuizData({
             id : '',
             quizName : '',
             description : '',
             pointsGradingSystem : '',
-            timeLimit : ''
+            timeLimit : '',
+            question : [],
         });
         const storedFormData = JSON.parse(localStorage.getItem('quizData')) || [];
             localStorage.setItem('quizData', JSON.stringify([...storedFormData, quizData]));

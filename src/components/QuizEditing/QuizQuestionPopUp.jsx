@@ -1,9 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
+    const {_id} = useParams();
+    const [quizData, setQuizData] = useState(JSON.parse(localStorage.getItem('quizData')));
+    const item = quizData.find((item) => item.id === _id);
+    console.log(item);
     const [questionData, setQuestionData] = useState({
         questionID : uuidv4(),
         questionNumber : 1,
@@ -18,24 +23,43 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
         answer2 : '',
         answer3 : '',
         answer4 : '',
+        marks : '',
     });
 
     const handleSubmit = (e) => {
         setQuestionData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
+    // console.log(questionData);
+    let temp = false
+    if(item > 0){
+          temp = true;   
+    }
 
     const submit = () => {
-        console.log(questionData);
-        setQuestionData({
-            id : '',
-            quizName : '',
-            description : '',
-            pointsGradingSystem : '',
-            timeLimit : ''
-        });
-        // const storedFormData = JSON.parse(localStorage.getItem('quizData')) || [];
-        //     localStorage.setItem('quizData', JSON.stringify([...storedFormData, quizData]));
-      };
+        // console.log(questionData);
+        if(temp){
+            setQuestionData({
+                questionID : '',
+                questionNumber : '',
+                questionName : '',
+                option1 : '',
+                option2 : '',
+                option3 : '',
+                option4 : '',
+                isMultipleAnswer : '',
+                answer : '',
+                answer1 : '',
+                answer2 : '',
+                answer3 : '',
+                answer4 : '',
+                marks : '',
+            });
+            item.question.push({questionData});
+            localStorage.setItem("quizData", JSON.stringify([...quizData]));
+        }
+        
+    };
+    
 
 
   function closeModal() {
@@ -93,59 +117,78 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                             onChange={handleSubmit}
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2" htmlFor="option1">
-                            Option 1
-                            </label>
-                            <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="option1"
-                            type="text"
-                            name='option1'
-                            placeholder="Enter option 1"
-                            value={questionData.option1}
-                            onChange={handleSubmit}
-                            />
+                        <div>
+                            <div className='flex gap-2'>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="option1">
+                                    Option 1
+                                    </label>
+                                    <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="option1"
+                                    type="text"
+                                    name='option1'
+                                    placeholder="Enter option 1"
+                                    value={questionData.option1}
+                                    onChange={handleSubmit}
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="option2">
+                                    Option 2
+                                    </label>
+                                    <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="option2"
+                                    name='option2'
+                                    type="text"
+                                    placeholder="Enter option 2"
+                                    value={questionData.option2}
+                                    onChange={handleSubmit}
+                                    />
+                                </div>
+                            </div>
+                            <div className='flex gap-2'>
+                            <div className="mb-4">
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="option3">
+                                    Option 3
+                                    </label>
+                                    <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="option3"
+                                    name='option3'
+                                    type="text"
+                                    placeholder="Enter option 3"
+                                    value={questionData.option3}
+                                    onChange={handleSubmit}
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="option4">
+                                    Option 4
+                                    </label>
+                                    <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="option4"
+                                    name='option4'
+                                    type="text"
+                                    placeholder="Enter option 4"
+                                    value={questionData.option4}
+                                    onChange={handleSubmit} />
+                                </div>
+                            </div>
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2" htmlFor="option2">
-                            Option 2
-                            </label>
-                            <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="option2"
-                            name='option2'
-                            type="text"
-                            placeholder="Enter option 2"
-                            value={questionData.option2}
-                            onChange={handleSubmit}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2" htmlFor="option3">
-                            Option 3
-                            </label>
-                            <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="option3"
-                            name='option3'
-                            type="text"
-                            placeholder="Enter option 3"
-                            value={questionData.option3}
-                            onChange={handleSubmit}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 font-bold mb-2" htmlFor="option4">
+                            <label className="block text-gray-700 font-bold mb-2" htmlFor="marks">
                             Option 4
                             </label>
                             <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="option4"
-                            name='option4'
-                            type="text"
-                            placeholder="Enter option 4"
-                            value={questionData.option4}
+                            id="marks"
+                            name='marks'
+                            type="number"
+                            placeholder="Enter Marks"
+                            value={questionData.marks}
                             onChange={handleSubmit} />
                         </div>
                         <div className="mb-4 flex gap-4 items-center">
@@ -181,54 +224,58 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 <>
                                     <div className="mb-4">
                                         <h1 className='text-gray-700 font-bold mb-2'>Select Multiple Answer</h1>
-                                        <div className='flex'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="answer1">
-                                                Option 1
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2"
-                                                id="answer1"
-                                                name="answer1"
-                                                type="checkbox"
-                                                // placeholder="Multiple choise"
-                                                checked={questionData.answer1 === "answer1"}
-                                                value="answer1"
-                                                onChange={handleSubmit} />
-                                            </label>
+                                        <div className='flex justify-evenly items-center'>
+                                            <div>
+                                                <label className="block text-gray-700 font-bold mb-2" htmlFor="answer1">
+                                                    Option 1
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2"
+                                                    id="answer1"
+                                                    name="answer1"
+                                                    type="checkbox"
+                                                    // placeholder="Multiple choise"
+                                                    checked={questionData.answer1 === "answer1"}
+                                                    value="answer1"
+                                                    onChange={handleSubmit} />
+                                                </label>
 
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer2">
-                                                Option 2
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="answer2"
-                                                name='answer2'
-                                                checked={questionData.answer2 === "answer2"}
-                                                type="checkbox"
-                                                placeholder="Single choise"
-                                                value="answer2"
-                                                onChange={handleSubmit} />
-                                            </label>
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer3">
-                                                Option 3
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="answer3"
-                                                name='answer3'
-                                                checked={questionData.answer3 === "answer3"}
-                                                type="checkbox"
-                                                value="answer3"
-                                                onChange={handleSubmit} />
-                                            </label>
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer4">
-                                                Option 4
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="answer4"
-                                                name='answer4'
-                                                checked={questionData.answer4 === "answer4"}
-                                                type="checkbox"
-                                                value="answer4"
-                                                onChange={handleSubmit} />
-                                            </label>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer2">
+                                                    Option 2
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="answer2"
+                                                    name='answer2'
+                                                    checked={questionData.answer2 === "answer2"}
+                                                    type="checkbox"
+                                                    placeholder="Single choise"
+                                                    value="answer2"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer3">
+                                                    Option 3
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="answer3"
+                                                    name='answer3'
+                                                    checked={questionData.answer3 === "answer3"}
+                                                    type="checkbox"
+                                                    value="answer3"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="answer4">
+                                                    Option 4
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="answer4"
+                                                    name='answer4'
+                                                    checked={questionData.answer4 === "answer4"}
+                                                    type="checkbox"
+                                                    value="answer4"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
@@ -236,54 +283,58 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 <>
                                     <div className="mb-4">
                                         <h1 className='text-gray-700 font-bold mb-2'>Select Single Answer</h1>
-                                        <div className='flex'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="Answer1">
-                                                Option 1
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2"
-                                                id="Answer1"
-                                                name='answer'
-                                                type="radio"
-                                                // placeholder="Multiple choise"
-                                                checked={questionData.answer === "Answer1"}
-                                                value="Answer1"
-                                                onChange={handleSubmit} />
-                                            </label>
+                                        <div className='flex justify-evenly items-center'>
+                                            <div>
+                                                <label className="block text-gray-700 font-bold mb-2" htmlFor="Answer1">
+                                                    Option 1
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2"
+                                                    id="Answer1"
+                                                    name='answer'
+                                                    type="radio"
+                                                    // placeholder="Multiple choise"
+                                                    checked={questionData.answer === "Answer1"}
+                                                    value="Answer1"
+                                                    onChange={handleSubmit} />
+                                                </label>
 
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer2">
-                                                Option 2
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="Answer2"
-                                                name='answer'
-                                                checked={questionData.answer === "Answer2"}
-                                                type="radio"
-                                                placeholder="Single choise"
-                                                value="Answer2"
-                                                onChange={handleSubmit} />
-                                            </label>
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer3">
-                                                Option 3
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="Answer3"
-                                                name='answer'
-                                                checked={questionData.answer === "Answer3"}
-                                                type="radio"
-                                                value="Answer3"
-                                                onChange={handleSubmit} />
-                                            </label>
-                                            <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer4">
-                                                Option 4
-                                                <input
-                                                className="focus:outline-none focus:shadow-outline mx-2 text-center"
-                                                id="Answer4"
-                                                name='answer'
-                                                checked={questionData.answer === "Answer4"}
-                                                type="radio"
-                                                value="Answer4"
-                                                onChange={handleSubmit} />
-                                            </label>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer2">
+                                                    Option 2
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="Answer2"
+                                                    name='answer'
+                                                    checked={questionData.answer === "Answer2"}
+                                                    type="radio"
+                                                    placeholder="Single choise"
+                                                    value="Answer2"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer3">
+                                                    Option 3
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="Answer3"
+                                                    name='answer'
+                                                    checked={questionData.answer === "Answer3"}
+                                                    type="radio"
+                                                    value="Answer3"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                                <label className="flex justify-center items-center text-gray-700 font-bold mb-2" htmlFor="Answer4">
+                                                    Option 4
+                                                    <input
+                                                    className="focus:outline-none focus:shadow-outline mx-2 text-center"
+                                                    id="Answer4"
+                                                    name='answer'
+                                                    checked={questionData.answer === "Answer4"}
+                                                    type="radio"
+                                                    value="Answer4"
+                                                    onChange={handleSubmit} />
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
