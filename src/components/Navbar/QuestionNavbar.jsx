@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import QuizFormPopUp from '../Quiz/QuizFormPopUp';
 import QuizQuestionPopUpModel from '../QuizEditing/QuizQuestionPopUp';
 
 const QuestionNavbar = () => {
@@ -10,20 +9,12 @@ const QuestionNavbar = () => {
 
 
     const [quizData, setquizData] = useState(JSON.parse(localStorage.getItem('quizData')));
-    console.log(_id);
-    // const updatedFormData = quizData.map((item) => {
-    //     if (item.id === id) {
-    //       return item;
-    //     }
-    //   });
     const item = quizData.find((item) => item.id === _id);
-    console.log(item);
   return (
     <>
         <QuizQuestionPopUpModel isOpen={quizQuestionOpen} setIsOpen={setQuizQuestionOpen} />
         <nav className='flex justify-evenly items-center py-1 bg-green-600'>
             <div className='h-12 flex justify-center items-center'>
-                {/* <img src="" alt=""  className='w-full h-full'/> */}
                 <span className='text-xl font-bold text-white'>
                     {
                         item.quizName
