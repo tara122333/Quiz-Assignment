@@ -1,41 +1,44 @@
 import { Dialog, Transition } from '@headlessui/react'
+import axios from 'axios';
 import { Fragment, useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
 
     const [quizData, setQuizData] = useState({
-        id : uuidv4(),
         quizName : '',
         description : '',
         pointsGradingSystem : '',
         timeLimit : '',
-        question : [],
     });
 
     const handleSubmit = (e) => {
         setQuizData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-        // console.log(quizData);
     };
 
     const submit = () => {
         // console.log(quizData);
-        setQuizData({
-            id : '',
-            quizName : '',
-            description : '',
-            pointsGradingSystem : '',
-            timeLimit : '',
-            question : [],
+        // const userData = {
+        //   quizName: quizData.quizName,
+        //   description: quizData.description,
+        //   pointsGradingSystem: quizData.pointsGradingSystem,
+        //   timeLimit: quizData.timeLimit,
+        // };
+        
+        axios.post('http://localhost:4000/create',{quizData}).then((response) => {
+            console.log(response.quizAllData);
+        }).catch((exception)=>{
+          console.log(exception);
         });
-        const storedFormData = JSON.parse(localStorage.getItem('quizData')) || [];
-            localStorage.setItem('quizData', JSON.stringify([...storedFormData, quizData]));
+
+        setQuizData({
+          id : '',
+          quizName : '',
+          description : '',
+          pointsGradingSystem : '',
+          timeLimit : '',
+      });
       };
-
-    //   useEffect(() => {
-    //     localStorage.setItem('formData', JSON.stringify(quizData));
-    //   }, [quizData]);
-
 
   function closeModal() {
     setIsOpen(false)

@@ -8,7 +8,6 @@ const Quiz = () => {
     // const [formData, setFormData] = useState(JSON.parse(localStorage.getItem('quizData')));
     useEffect(()=>{
         axios.get('http://localhost:4000/all').then((response)=>{
-            console.log(response.data.quizData);
             setFormData(response.data.quizData);
         }).catch((exception)=>{
             console.log(exception);
