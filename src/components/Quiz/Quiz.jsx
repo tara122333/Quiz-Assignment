@@ -1,9 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 
 import QuizPoster from './QuizPoster'
 import Navbar from '../Navbar/Navbar'
 const Quiz = () => {
-    const [formData, setFormData] = useState(JSON.parse(localStorage.getItem('quizData')));
+    const [formData, setFormData] = useState();
+    // const [formData, setFormData] = useState(JSON.parse(localStorage.getItem('quizData')));
+    useEffect(()=>{
+        axios.get('http://localhost:4000/all').then((response)=>{
+            console.log(response.data.quizData);
+            setFormData(response.data.quizData);
+        }).catch((exception)=>{
+            console.log(exception);
+        })
+    },[]);
+
+    console.log(formData);
+    
   return (
     <>
         <div className="bg-red-500 ">

@@ -19,7 +19,7 @@ const QuizPoster = (props) => {
   return (
     <>
         <QuizFormPopUp isOpen={quizFormOpen} setIsOpen={setQuizFormOpen} />
-        <div className='border-2 border-blue-500 w-full lg:w-2/6 py-1 rounded-lg bg-red-100' key={props.id}>
+        <div className='border-2 border-blue-500 w-full lg:w-2/6 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>
                         <h1 className='px-4 text-center text-xl font-bold uppercase'>
@@ -27,11 +27,11 @@ const QuizPoster = (props) => {
                         </h1>
                     </div>
                     <div className='flex gap-2 justify-center items-center px-2 lg:px-4'>
-                        <Link to={`/edit/${props.id}`} target='_blank' className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
+                        <Link to={`/edit/${props._id}`} target='_blank' className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
                             <MdOutlineEdit className='text-2xl hover:scale-125 duration-500'/>
                         </Link>
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' 
-                        onClick={() => quizDelete(props.id)}
+                        onClick={() => quizDelete(props._id)}
                         >
                             <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
                         </span>
@@ -59,7 +59,7 @@ const QuizPoster = (props) => {
                         </div>
                     </div>
                 </div>
-                <Link to={`/quiz/${props.id}`}>
+                <Link to={`/quiz/${props._id}`}>
                     <div className='flex items-center px-5 py-1 my-4 cursor-pointer'>
                         <h3 className='bg-blue-500 rounded-md py-1 hover:bg-blue-700 text-white px-8 font-semibold'>Start</h3>
                     </div>
