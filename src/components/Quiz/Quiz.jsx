@@ -13,8 +13,6 @@ const Quiz = () => {
             console.log(exception);
         })
     },[]);
-
-    console.log(formData);
     
   return (
     <>
@@ -22,7 +20,7 @@ const Quiz = () => {
             <Navbar />
         </div>
         <div className='py-8 w-full'>
-            <div className='flex gap-6 flex-col lg:flex-row container mx-auto px-4 lg:px-24 '>
+            <div className='flex gap-6 flex-col flex-wrap justify-center lg:flex-row px-4 lg:px-24 '>
                 {formData && formData.map((item) => (
                         <QuizPoster {...item}/>
                 ))}

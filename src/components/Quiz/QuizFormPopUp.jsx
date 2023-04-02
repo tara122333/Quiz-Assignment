@@ -16,15 +16,7 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
         setQuizData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const submit = () => {
-        // console.log(quizData);
-        // const userData = {
-        //   quizName: quizData.quizName,
-        //   description: quizData.description,
-        //   pointsGradingSystem: quizData.pointsGradingSystem,
-        //   timeLimit: quizData.timeLimit,
-        // };
-        
+    const submit = () => {        
         axios.post('http://localhost:4000/create',{quizData}).then((response) => {
             console.log(response.quizAllData);
         }).catch((exception)=>{
@@ -37,7 +29,7 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
           description : '',
           pointsGradingSystem : '',
           timeLimit : '',
-      });
+        });
       };
 
   function closeModal() {

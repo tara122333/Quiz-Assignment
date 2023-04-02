@@ -1,25 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
-import QuizFormPopUp from './QuizFormPopUp'
 import { Link } from 'react-router-dom'
+import axios from 'axios';
+
+
 const QuizPoster = (props) => {
-    const [quizFormOpen, setQuizFormOpen] = useState(false);
-    const quizFormOpenModel = () => setQuizFormOpen(true);
-    const [quizData, setQuizData] = useState(JSON.parse(localStorage.getItem('quizData')),[]);
-    // console.log(quizData);
     const quizDelete = (id) => {
-        const updatedQuizData = quizData.filter((item) => item.id !== id);
-        localStorage.setItem('quizData', JSON.stringify(updatedQuizData));
-        setQuizData(updatedQuizData);
+        axios.delete(`http://localhost:4000/delete/quiz/${id}`).then((response)=>{
+            console.log(response.message);
+        }).catch((exception)=>{
+            console.log(exception);
+        });
         window.location.reload(true); 
       };
-
-
   return (
     <>
-        <QuizFormPopUp isOpen={quizFormOpen} setIsOpen={setQuizFormOpen} />
-        <div className='border-2 border-blue-500 w-full lg:w-2/6 py-1 rounded-lg bg-red-100' key={props._id}>
+        <div className='border-2 border-blue-500 w-full lg:w-96 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>
                         <h1 className='px-4 text-center text-xl font-bold uppercase'>

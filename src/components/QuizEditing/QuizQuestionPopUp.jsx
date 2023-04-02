@@ -1,4 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
+import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,18 +7,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     const {_id} = useParams();
-    const [quizData, setQuizData] = useState(JSON.parse(localStorage.getItem('quizData')));
-    const item = quizData.find((item) => item.id === _id);
-    console.log(item);
-    const [questionData, setQuestionData] = useState({
-        questionID : uuidv4(),
-        questionNumber : 1,
+    // const [quizData, setQuizData] = useState(JSON.parse(localStorage.getItem('quizData')));
+    // const item = quizData.find((item) => item.id === _id);
+    // console.log(item);
+    const [question, setQuestion] = useState({
         questionName : '',
         option1 : '',
         option2 : '',
         option3 : '',
         option4 : '',
-        isMultipleAnswer : 'NO',
+        isMultipleAnswer : false,
         answer : '',
         answer1 : '',
         answer2 : '',
@@ -27,37 +26,33 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     });
 
     const handleSubmit = (e) => {
-        setQuestionData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setQuestion((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
     // console.log(questionData);
-    let temp = false
-    if(item > 0){
-          temp = true;   
-    }
 
     const submit = () => {
         // console.log(questionData);
-        if(temp){
-            setQuestionData({
-                questionID : '',
-                questionNumber : '',
-                questionName : '',
-                option1 : '',
-                option2 : '',
-                option3 : '',
-                option4 : '',
-                isMultipleAnswer : '',
-                answer : '',
-                answer1 : '',
-                answer2 : '',
-                answer3 : '',
-                answer4 : '',
-                marks : '',
-            });
-            item.question.push({questionData});
-            localStorage.setItem("quizData", JSON.stringify([...quizData]));
-        }
-        
+
+        axios.post(`http://localhost:4000/createquestion/${_id}`,{question}).then((response) => {
+            console.log(response.questionData);
+        }).catch((exception)=>{
+          console.log(exception);
+        });
+
+        setQuestion({
+            questionName : '',
+            option1 : '',
+            option2 : '',
+            option3 : '',
+            option4 : '',
+            isMultipleAnswer : '',
+            answer : '',
+            answer1 : '',
+            answer2 : '',
+            answer3 : '',
+            answer4 : '',
+            marks : '',
+        });
     };
     
 
@@ -113,7 +108,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                             name='questionName'
                             type="text"
                             placeholder="Enter question name"
-                            value={questionData.questionName}
+                            value={question.questionName}
                             onChange={handleSubmit}
                             />
                         </div>
@@ -129,7 +124,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                     type="text"
                                     name='option1'
                                     placeholder="Enter option 1"
-                                    value={questionData.option1}
+                                    value={question.option1}
                                     onChange={handleSubmit}
                                     />
                                 </div>
@@ -143,7 +138,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                     name='option2'
                                     type="text"
                                     placeholder="Enter option 2"
-                                    value={questionData.option2}
+                                    value={question.option2}
                                     onChange={handleSubmit}
                                     />
                                 </div>
@@ -159,7 +154,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                     name='option3'
                                     type="text"
                                     placeholder="Enter option 3"
-                                    value={questionData.option3}
+                                    value={question.option3}
                                     onChange={handleSubmit}
                                     />
                                 </div>
@@ -173,7 +168,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                     name='option4'
                                     type="text"
                                     placeholder="Enter option 4"
-                                    value={questionData.option4}
+                                    value={question.option4}
                                     onChange={handleSubmit} />
                                 </div>
                             </div>
@@ -188,7 +183,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                             name='marks'
                             type="number"
                             placeholder="Enter Marks"
-                            value={questionData.marks}
+                            value={question.marks}
                             onChange={handleSubmit} />
                         </div>
                         <div className="mb-4 flex gap-4 items-center">
@@ -201,8 +196,8 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 name='isMultipleAnswer'
                                 type="radio"
                                 // placeholder="Multiple choise"
-                                checked={questionData.isMultipleAnswer === "YES"}
-                                value="YES"
+                                checked={question.isMultipleAnswer === true}
+                                value={true}
                                 onChange={handleSubmit} />
                             </label>
 
@@ -212,15 +207,15 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                 id="isMultipleAnswerNo"
                                 name='isMultipleAnswer'
-                                checked={questionData.isMultipleAnswer === "NO"}
+                                checked={question.isMultipleAnswer === false}
                                 type="radio"
                                 placeholder="Single choise"
-                                value="NO"
+                                value={false}
                                 onChange={handleSubmit} />
                             </label>
                         </div>
                         {
-                            questionData.isMultipleAnswer === "YES" ? (
+                            question.isMultipleAnswer ? (
                                 <>
                                     <div className="mb-4">
                                         <h1 className='text-gray-700 font-bold mb-2'>Select Multiple Answer</h1>
@@ -234,7 +229,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     name="answer1"
                                                     type="checkbox"
                                                     // placeholder="Multiple choise"
-                                                    checked={questionData.answer1 === "answer1"}
+                                                    checked={question.answer1 === "answer1"}
                                                     value="answer1"
                                                     onChange={handleSubmit} />
                                                 </label>
@@ -245,7 +240,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="answer2"
                                                     name='answer2'
-                                                    checked={questionData.answer2 === "answer2"}
+                                                    checked={question.answer2 === "answer2"}
                                                     type="checkbox"
                                                     placeholder="Single choise"
                                                     value="answer2"
@@ -259,7 +254,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="answer3"
                                                     name='answer3'
-                                                    checked={questionData.answer3 === "answer3"}
+                                                    checked={question.answer3 === "answer3"}
                                                     type="checkbox"
                                                     value="answer3"
                                                     onChange={handleSubmit} />
@@ -270,7 +265,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="answer4"
                                                     name='answer4'
-                                                    checked={questionData.answer4 === "answer4"}
+                                                    checked={question.answer4 === "answer4"}
                                                     type="checkbox"
                                                     value="answer4"
                                                     onChange={handleSubmit} />
@@ -293,7 +288,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     name='answer'
                                                     type="radio"
                                                     // placeholder="Multiple choise"
-                                                    checked={questionData.answer === "Answer1"}
+                                                    checked={question.answer === "Answer1"}
                                                     value="Answer1"
                                                     onChange={handleSubmit} />
                                                 </label>
@@ -304,7 +299,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="Answer2"
                                                     name='answer'
-                                                    checked={questionData.answer === "Answer2"}
+                                                    checked={question.answer === "Answer2"}
                                                     type="radio"
                                                     placeholder="Single choise"
                                                     value="Answer2"
@@ -318,7 +313,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="Answer3"
                                                     name='answer'
-                                                    checked={questionData.answer === "Answer3"}
+                                                    checked={question.answer === "Answer3"}
                                                     type="radio"
                                                     value="Answer3"
                                                     onChange={handleSubmit} />
@@ -329,7 +324,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                                     className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                                     id="Answer4"
                                                     name='answer'
-                                                    checked={questionData.answer === "Answer4"}
+                                                    checked={question.answer === "Answer4"}
                                                     type="radio"
                                                     value="Answer4"
                                                     onChange={handleSubmit} />
