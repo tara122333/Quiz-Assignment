@@ -3,30 +3,7 @@ import { useParams } from 'react-router-dom';
 import QuizQuestionPopUpModel from '../QuizEditing/QuizQuestionPopUp';
 import axios from 'axios';
 
-const QuestionNavbar = () => {
-    const { _id } = useParams();
-    const [questionData, setQuestionData] = useState() || [];
-    const [quizData, setquizData] = useState({
-            id : '',
-            quizName : '',
-            description : '',
-            pointsGradingSystem : '',
-            timeLimit : '',
-    });
-
-    useEffect(()=>{
-        axios.get(`http://localhost:4000/quiz/question/${_id}`).then((response)=>{
-            setQuestionData(response.data.quizQuestionData.question);
-        }).catch((error)=>{
-            console.log(error);
-        })
-        axios.get(`http://localhost:4000/quiz/${_id}`).then((response)=>{
-            setquizData(response.data.findQuiz);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    },[]);
-
+const QuestionNavbar = (props) => {
     const [quizQuestionOpen, setQuizQuestionOpen] = useState(false);
     const quizQuestionOpenModel = () => setQuizQuestionOpen(true);
   return (
@@ -36,7 +13,7 @@ const QuestionNavbar = () => {
             <div className='h-12 flex justify-center items-center'>
                 <span className='text-xl font-bold text-white'>
                     {
-                        quizData.quizName
+                        props.quizName
                     }
                 </span>
             </div>
@@ -52,7 +29,7 @@ const QuestionNavbar = () => {
                         Points
                         <span className='text-center px-2 bg-black rounded-md'>
                             {
-                                quizData.pointsGradingSystem
+                                props.pointsGradingSystem
                             }
                         </span>
                     </div>
@@ -60,7 +37,7 @@ const QuestionNavbar = () => {
                         Total Time
                     <span className='text-center px-2 bg-black rounded-md text-lg'> 
                             {
-                                quizData.timeLimit
+                                props.timeLimit
                             } Minutes
                         </span>
                     </div>

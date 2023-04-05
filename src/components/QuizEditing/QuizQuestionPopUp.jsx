@@ -2,14 +2,10 @@ import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     const {_id} = useParams();
-    // const [quizData, setQuizData] = useState(JSON.parse(localStorage.getItem('quizData')));
-    // const item = quizData.find((item) => item.id === _id);
-    // console.log(item);
     const [question, setQuestion] = useState({
         questionName : '',
         option1 : '',
@@ -28,34 +24,16 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     const handleSubmit = (e) => {
         setQuestion((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
-    // console.log(questionData);
+
+    console.log(question);
 
     const submit = () => {
-        // console.log(questionData);
-
         axios.post(`http://localhost:4000/createquestion/${_id}`,{question}).then((response) => {
             console.log(response.questionData);
         }).catch((exception)=>{
           console.log(exception);
         });
-
-        setQuestion({
-            questionName : '',
-            option1 : '',
-            option2 : '',
-            option3 : '',
-            option4 : '',
-            isMultipleAnswer : '',
-            answer : '',
-            answer1 : '',
-            answer2 : '',
-            answer3 : '',
-            answer4 : '',
-            marks : '',
-        });
     };
-    
-
 
   function closeModal() {
     setIsOpen(false)
@@ -196,8 +174,8 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 name='isMultipleAnswer'
                                 type="radio"
                                 // placeholder="Multiple choise"
-                                checked={question.isMultipleAnswer === true}
-                                value={true}
+                                checked={question.isMultipleAnswer === "true"}
+                                value="true"
                                 onChange={handleSubmit} />
                             </label>
 
@@ -207,15 +185,15 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                                 className="focus:outline-none focus:shadow-outline mx-2 text-center"
                                 id="isMultipleAnswerNo"
                                 name='isMultipleAnswer'
-                                checked={question.isMultipleAnswer === false}
+                                checked={question.isMultipleAnswer === "false" }
                                 type="radio"
                                 placeholder="Single choise"
-                                value={false}
+                                value="false"
                                 onChange={handleSubmit} />
                             </label>
                         </div>
                         {
-                            question.isMultipleAnswer ? (
+                            question.isMultipleAnswer === "true" ? (
                                 <>
                                     <div className="mb-4">
                                         <h1 className='text-gray-700 font-bold mb-2'>Select Multiple Answer</h1>
