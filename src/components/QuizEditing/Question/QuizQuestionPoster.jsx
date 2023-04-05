@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
 import axios from 'axios'
+
+import UpdateQuestionDataPopUpModel from './UpdateQuestionData'
 
 const QuizQuestionPoster = (props) => {
     const DeleteQuestion = (_id) => {
@@ -14,8 +16,12 @@ const QuizQuestionPoster = (props) => {
         window.location.reload(true); 
     }
 
+    const [quizQuestionOpen, setQuizQuestionOpen] = useState(false);
+    const quizQuestionOpenModel = () => setQuizQuestionOpen(true);
+    
   return (
     <>
+        <UpdateQuestionDataPopUpModel isOpen={quizQuestionOpen} setIsOpen={setQuizQuestionOpen} _id={props._id}/>
         <div className='border-2 border-blue-500 w-full lg:w-96 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>
@@ -24,9 +30,9 @@ const QuizQuestionPoster = (props) => {
                         </h1>
                     </div>
                     <div className='flex gap-2 justify-center items-center px-2 lg:px-4'>
-                        <Link to={`/edit/${props._id}`} target='_blank' className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
+                        <span className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' onClick={quizQuestionOpenModel}>
                             <MdOutlineEdit className='text-2xl hover:scale-125 duration-500'/>
-                        </Link>
+                        </span>
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' onClick={()=> DeleteQuestion(props._id)}
                         >
                             <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
