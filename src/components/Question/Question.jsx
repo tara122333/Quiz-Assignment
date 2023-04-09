@@ -2,6 +2,16 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+// questionData  --> Backend data (real Data)
+// questionIndex --> total no of question in quiz
+// questionAnswerData  --> final data which store question answer
+// len --> total no of question
+// questionLen  --> total no of answer which responed by user
+
+//  len = 4
+
+
+
 const Question = () => {
 
     const {_id} = useParams();
@@ -20,8 +30,7 @@ const Question = () => {
         answer3 : '',
         answer4 : '',
         marks : '',
-    }]);
-
+    }]) || [];
     useEffect(()=>{
         axios.get(`http://localhost:4000/quiz/question/${_id}`).then((response)=>{
             setQuestionData(response.data.quizQuestionData.question);
@@ -31,7 +40,7 @@ const Question = () => {
     },[]);
 
 
-    const [questionIndex, setQuestionIndex] = useState(0);
+    const [questionIndex, setQuestionIndex] = useState(0 , []);
 
     const [questionAnswerData, setQuestionAnswerData] = useState([{
         id : 0,
@@ -54,14 +63,14 @@ const Question = () => {
     const handleSubmit = (e,_id) => {
         setAnswerData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
-    const [scorData, setScoreData] = useState(0);
+    const [scorData, setScoreData] = useState(0 , []);
 
     let Score = 0;
 
     const SubmitAndNext = () => {
 
         setQuestionAnswerData([...questionAnswerData, answerData]);
-        
+
         setAnswerData({
             id : questionIndex +1,
             answer : '',
@@ -72,8 +81,12 @@ const Question = () => {
         })
       };
     
+    //   console.log(questionAnswerData[0].id)
+
     const Submit = () => {
-        setQuestionAnswerData([...questionAnswerData, answerData]);
+
+        console.log(questionAnswerData);
+
         // setAnswerData({
         //     id : questionIndex+1,
         //     answer : '',
@@ -85,55 +98,88 @@ const Question = () => {
         var len = questionData.length;
         var questionLen = questionAnswerData.length;
         var index = 0;
-        var tempSum = 0;
         while(len > index){
+            var tempSum = 0;
             var i = 1;
-            while(i<questionLen){
-                console.log(questionAnswerData[i].id)
-                console.log(index)
-                if(questionAnswerData[i].id  === index){
-                    
-                    console.log("condition true");
+            while(i < questionLen){
+                if(questionAnswerData[i]?.id  === index){
                     if(questionData[index].isMultipleAnswer === "true"){
                         // console.log("is Mul");
-                        // if((questionData[index].answer1 === questionAnswerData[i].answer1) &&(questionData[index].answer2 === questionAnswerData[i].answer2) &&(questionData[index].answer3 === questionAnswerData[i].answer3) &&(questionData[index].answer4 === questionAnswerData[i].answer4)){
-                        //     tempSum = questionData[index].marks;
-                        //     Score = Score + parseInt(tempSum);
-                        //     setScoreData(Score);
-                        // }
+                        if((questionData[index].answer1 === questionAnswerData[i].answer1) &&(questionData[index].answer2 === questionAnswerData[i].answer2) &&(questionData[index].answer3 === questionAnswerData[i].answer3) &&(questionData[index].answer4 === questionAnswerData[i].answer4)){
+                            tempSum = questionData[index].marks;
+                            // Score = Score + parseInt(tempSum);
+                            // setScoreData(Score);
+                        }
+                        // tempSum = questionData[index].marks
                     }
                     else{
-                        // if(questionData[index].answer === questionAnswerData[i].answer){
-                        //     tempSum = questionData[index].marks;
-                        //     Score = Score + parseInt(tempSum);
-                        //     setScoreData(Score);
-                        //     // console.log(scorData);
-                        // }
+                        if(questionData[index].answer === questionAnswerData[i].answer){
+                            tempSum = questionData[index].marks;
+                            // Score = Score + parseInt(tempSum);
+                            // setScoreData(Score);
+                            // console.log(scorData);
+                        }
                         // console.log("not mul");
+                        // tempSum = questionData[index].marks
                     }
                 }
                 i = i + 1;
             }
+            Score = Score + parseInt(tempSum);
+            setScoreData(Score);
+            // setScoreData(scorData+tempSum);
+            // console.log(Score);
             index = index + 1;   
         }
       };
-    //   console.log(questionAnswerData);
+      console.log(scorData);
   return (
     <>
         <h1 className='bg-red-600 h-12 w-full text-black'>Navbar</h1>
 
         {
-            questionData.length === questionIndex ? (
+            questionData.length <= questionIndex ? (
                 <>
-                    <div>
-                        Result
-                    </div>
+                    {
+                        questionData.length < questionIndex ? (
+                            <div className='flex justify-center items-center w-full h-full py-28'>
+                                <div className='flex justify-center items-center w-96 h-48 border-2 rounded-xl border-red-700 bg-red-100 rounded-2x gap-4'>
+                                    <h1 className='font-bold'>
+                                        Your Score is : 
+                                    </h1>
+                                    <h1 className='bg-black font-bold rounded-lg text-white px-8 text-center flex justify-center items-center w-12'>
+                                        {
+                                            scorData
+                                        }
+                                    </h1>
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <div className='flex justify-center items-center py-20'>
+                                    <div className='flex gap-5 border-2 border-red-500 p-20'>
+                                        <span className='cursor-pointer px-3 py-1 bg-purple-600 hover:bg-purple-800 rounded-lg text-white font-semibold' onClick={()=> setQuestionIndex(questionIndex-1)}>
+                                                                    Previous
+                                                                </span>
+
+                                        <span className='cursor-pointer px-3 py-1 bg-green-600 hover:bg-green-800  rounded-lg text-white font-semibold' onClick={()=> {
+                                                                Submit();
+                                                                setQuestionIndex(questionIndex+1)
+                                                                }} >
+                                                                Submit
+                                        </span>
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    }
+                    
                 </>
             ) : (
                 <>
                     <div className='flex justify-center items-center gap-5 py-20 flex-wrap w-full'>
                     {
-                            <div className='py-5 px-6 bg-red-100 w-full lg:w-2/5 flex flex-col gap-5 rounded-lg' key={questionData[questionIndex]._id}>
+                            <div className='py-5 px-6 bg-red-100 w-full lg:w-2/5 flex flex-col gap-5 rounded-lg' key={questionData[questionIndex]?._id}>
                                 <div className='flex justify-between bg-cyan-200 px-4 py-2'>
                                     <h1 className='flex gap-1 font-bold'>
                                         <p className='font-bold'>
@@ -146,7 +192,7 @@ const Question = () => {
                                     <span className='flex bg-black text-white rounded-md px-3'>
                                         <p className='font-semibold px-2'>Marks</p>
                                         {
-                                            questionData[questionIndex].marks
+                                            questionData[questionIndex]?.marks
                                         }
                                     </span>
                                 </div>
@@ -155,13 +201,13 @@ const Question = () => {
                                         <h1 className='font-bold text-lg'>Question : </h1>
                                         <p>
                                             {
-                                                questionData[questionIndex].questionName
+                                                questionData[questionIndex]?.questionName
                                             }
                                         </p>
                                     </div>
                                     <div>
                                         {
-                                            questionData[questionIndex].isMultipleAnswer === "true" ? (
+                                            questionData[questionIndex]?.isMultipleAnswer === "true" ? (
                                                 <>
                                                     <div className="mb-4">
                                                         <h1 className='text-gray-700 font-bold mb-2'>Select Multiple Answer</h1>
@@ -175,9 +221,9 @@ const Question = () => {
                                                                     type="checkbox"
                                                                     checked={answerData.answer1 === "answer1"}
                                                                     value="answer1"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option1
+                                                                        questionData[questionIndex]?.option1
 
                                                                     }
                                                                 </label>
@@ -192,9 +238,9 @@ const Question = () => {
                                                                     type="checkbox"
                                                                     placeholder="Single choise"
                                                                     value="answer2"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option2
+                                                                        questionData[questionIndex]?.option2
 
                                                                     }
                                                                 </label>
@@ -211,7 +257,7 @@ const Question = () => {
                                                                     value="answer3"
                                                                     onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option3
+                                                                        questionData[questionIndex]?.option3
 
                                                                     }
                                                                 </label>
@@ -224,9 +270,9 @@ const Question = () => {
                                                                     checked={answerData.answer4 === "answer4"}
                                                                     type="checkbox"
                                                                     value="answer4"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option4
+                                                                        questionData[questionIndex]?.option4
 
                                                                     }
                                                                 </label>
@@ -250,9 +296,9 @@ const Question = () => {
                                                                     // placeholder="Multiple choise"
                                                                     checked={answerData.answer === "Answer1"}
                                                                     value="Answer1"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)}/>
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)}/>
                                                                     {
-                                                                        questionData[questionIndex].option1
+                                                                        questionData[questionIndex]?.option1
 
                                                                     }
                                                                 </label>
@@ -267,9 +313,9 @@ const Question = () => {
                                                                     type="radio"
                                                                     placeholder="Single choise"
                                                                     value="Answer2"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option2
+                                                                        questionData[questionIndex]?.option2
 
                                                                     }
                                                                 </label>
@@ -284,9 +330,9 @@ const Question = () => {
                                                                     checked={answerData.answer === "Answer3"}
                                                                     type="radio"
                                                                     value="Answer3"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)}/>
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)}/>
                                                                      {
-                                                                        questionData[questionIndex].option3
+                                                                        questionData[questionIndex]?.option3
 
                                                                     }
                                                                 </label>
@@ -299,9 +345,9 @@ const Question = () => {
                                                                     checked={answerData.answer === "Answer4"}
                                                                     type="radio"
                                                                     value="Answer4"
-                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]._id)} />
+                                                                    onChange={(e)=> handleSubmit(e,questionData[questionIndex]?._id)} />
                                                                     {
-                                                                        questionData[questionIndex].option4
+                                                                        questionData[questionIndex]?.option4
 
                                                                     }
                                                                 </label>
@@ -328,7 +374,7 @@ const Question = () => {
                                         }
 
                                     {
-                                        questionIndex === questionData.length - 1 ? (
+                                        questionIndex === questionData.length  ? (
                                             <>
                                             </>
                                         ) : (
@@ -343,7 +389,7 @@ const Question = () => {
                                         )
                                     }
                                     {
-                                        questionData.length === questionIndex + 1 ? (
+                                        questionData.length === questionIndex  ? (
                                             <>
                                                 <span className='cursor-pointer px-3 py-1 bg-green-600 hover:bg-green-800  rounded-lg text-white font-semibold' onClick={()=> {
                                                     Submit();
