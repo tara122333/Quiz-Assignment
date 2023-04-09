@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {  useState } from 'react';
 import QuizQuestionPopUpModel from '../QuizEditing/QuizQuestionPopUp';
-import axios from 'axios';
 
 const QuestionNavbar = (props) => {
     const [quizQuestionOpen, setQuizQuestionOpen] = useState(false);
