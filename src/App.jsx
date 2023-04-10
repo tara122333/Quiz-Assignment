@@ -9,10 +9,10 @@ import Question from "./components/Question/Question";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Quiz />} />
-      <Route path="/quiz/:_id" element={<Question/>} />
-      <Route path="/edit/quiz/:_id" element={<QuizEditing />} />
-    </Routes>
+      <Route path="/" exect element={<Quiz />} />
+      <Route path="/quiz/:_id" exect element={<Question/>} />
+      <Route path="/edit/quiz/:_id" exect element={<QuizEditing />} />
+    </Routes> 
   );
 }
 

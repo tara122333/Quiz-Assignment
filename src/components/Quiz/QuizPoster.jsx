@@ -23,7 +23,7 @@ const QuizPoster = (props) => {
                         </h1>
                     </div>
                     <div className='flex gap-2 justify-center items-center px-2 lg:px-4'>
-                        <Link to={`/edit/${props._id}`} target='_blank' className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
+                        <Link to={`/edit/quiz/${props._id}`} className='bg-green-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer'>
                             <MdOutlineEdit className='text-2xl hover:scale-125 duration-500'/>
                         </Link>
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' 
