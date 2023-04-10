@@ -23,7 +23,7 @@ const QuizQuestionPoster = (props) => {
         <div className='border-2 border-blue-500 w-full lg:w-96 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>
-                        <h1 className='px-4 text-center text-xl font-bold uppercase'>
+                        <h1 className='px-4 text-center text-xl font-bold'>
                             {props.questionName}
                         </h1>
                     </div>
