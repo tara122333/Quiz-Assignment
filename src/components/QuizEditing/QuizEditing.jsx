@@ -31,19 +31,23 @@ const QuizEditing = () => {
             timeLimit : '',
     });
 
-    useEffect(()=>{
-        const fun = async()=>{
-          const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
-            setquizData(response.data.findQuiz);
-        }
-        fun();
-    },[]);
+    const fun1 = async()=>{
+      const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
+        setquizData(response.data.findQuiz);
+    }
 
     useEffect(()=>{
-      const fun = async()=>{
-        const response = await axios.get(`${BASE_URL}/quiz/question/${_id}`);
-          setQuestionData(response.data.quizQuestionData.question);
-      }
+        
+        fun1();
+    },[]);
+
+    const fun = async()=>{
+      const response = await axios.get(`${BASE_URL}/quiz/question/${_id}`);
+        setQuestionData(response.data.quizQuestionData.question);
+    }
+    
+    useEffect(()=>{
+      
       fun();
     },[]);
     
