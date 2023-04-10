@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-
 import QuizPoster from './QuizPoster'
 import Navbar from '../Navbar/Navbar'
+
 const Quiz = () => {
+    const BASE_URL="https://quizbackend-faiu.onrender.com"
     const [formData, setFormData] = useState();
-    // const [formData, setFormData] = useState(JSON.parse(localStorage.getItem('quizData')));
     useEffect(()=>{
-        axios.get('http://localhost:4000/all').then((response)=>{
+        const fun = async() =>{
+            const response = await axios.get(`${BASE_URL}/all`);
             setFormData(response.data.quizData);
-        }).catch((exception)=>{
-            console.log(exception);
-        })
+        };
+        fun();
     },[]);
     
   return (
@@ -31,4 +31,4 @@ const Quiz = () => {
   )
 }
 
-export default Quiz
+export default Quiz;

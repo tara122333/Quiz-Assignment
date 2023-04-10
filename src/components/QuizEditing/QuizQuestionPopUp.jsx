@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
+    const BASE_URL='https://quizbackend-faiu.onrender.com';
+    // const BASE_URL='http://localhost:4000';
     const {_id} = useParams();
     const [question, setQuestion] = useState({
         questionName : '',
@@ -27,12 +29,11 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
 
     console.log(question);
 
-    const submit = () => {
-        axios.post(`http://localhost:4000/createquestion/${_id}`,{question}).then((response) => {
-            console.log(response.questionData);
-        }).catch((exception)=>{
-          console.log(exception);
-        });
+    const submit = async() => {
+        const response = await axios.post(`${BASE_URL}/createquestion/${_id}`,{question});
+        if(response.status === 200){
+            window.location.reload(true);
+        }
     };
 
   function closeModal() {
@@ -75,7 +76,7 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                     Add Question
                   </Dialog.Title>
                   <div className="mt-4">
-                    <form className="w-full max-w-lg mx-auto" onSubmit={submit}>
+                    <form className="w-full max-w-lg mx-auto">
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="questionName">
                             Question Name
@@ -314,12 +315,12 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                             )
                         }
                         <div className="flex items-center justify-center">
-                            <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
+                            <div
+                            className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            onClick={()=> submit()}
                             >
                             Submit
-                            </button>
+                            </div>
                         </div>
                     </form>
                   </div>

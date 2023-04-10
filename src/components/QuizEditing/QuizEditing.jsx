@@ -7,6 +7,7 @@ import axios from 'axios';
 import QuizQuestionPoster from './Question/QuizQuestionPoster';
 
 const QuizEditing = () => {
+  const BASE_URL='https://quizbackend-faiu.onrender.com';
     const { _id } = useParams();
     const [questionData, setQuestionData] = useState([{
         questionName : '',
@@ -31,20 +32,21 @@ const QuizEditing = () => {
     });
 
     useEffect(()=>{
-        axios.get(`http://localhost:4000/quiz/question/${_id}`).then((response)=>{
-            setQuestionData(response.data.quizQuestionData.question);
-        }).catch((error)=>{
-            console.log(error);
-        })
-        axios.get(`http://localhost:4000/quiz/${_id}`).then((response)=>{
+        const fun = async()=>{
+          const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
             setquizData(response.data.findQuiz);
-        }).catch((error)=>{
-            console.log(error);
-        })
+        }
+        fun();
     },[]);
 
-    console.log(questionData);
-
+    useEffect(()=>{
+      const fun = async()=>{
+        const response = await axios.get(`${BASE_URL}/quiz/question/${_id}`);
+          setQuestionData(response.data.quizQuestionData.question);
+      }
+      fun();
+    },[]);
+    
   return (
     <>
         <div>

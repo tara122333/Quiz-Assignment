@@ -4,6 +4,9 @@ import { Fragment, useState } from 'react'
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
 
+  const BASE_URL='https://quizbackend-faiu.onrender.com';
+  // const BASE_URL='http://localhost:4000';
+
     const [quizData, setQuizData] = useState({
         quizName : '',
         description : '',
@@ -15,27 +18,22 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
         setQuizData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const submit = () => {        
-        axios.post('http://localhost:4000/create',{quizData}).then((response) => {
-            console.log(response.quizAllData);
-        }).catch((exception)=>{
-          console.log(exception);
-        });
-
-        setQuizData({
-          id : '',
-          quizName : '',
-          description : '',
-          pointsGradingSystem : '',
-          timeLimit : '',
-        });
+    const submit = async() => { 
+      const response = await axios.post(`${BASE_URL}/create`, {quizData});
+        if(response.status === 200){
+          setQuizData({
+            quizName : '',
+            description : '',
+            pointsGradingSystem : '',
+            timeLimit : '',
+        })
+        window.location.reload(true);
+      }
       };
 
   function closeModal() {
     setIsOpen(false)
   }
-
-
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -71,7 +69,7 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
                     Create Quiz
                   </Dialog.Title>
                   <div className='py-6'>
-                    <form className="w-full max-w-lg mx-auto" onSubmit={submit}>
+                    <form className="w-full max-w-lg mx-auto">
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="quiz-name">
                             Quiz Name
@@ -128,12 +126,12 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
                             />
                         </div>
                         <div className="flex items-center justify-center">
-                            <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
+                            <div
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+                            onClick={()=> submit()}
                             >
                             Create Quiz
-                            </button>
+                            </div>
                         </div>
                     </form>
                   </div>

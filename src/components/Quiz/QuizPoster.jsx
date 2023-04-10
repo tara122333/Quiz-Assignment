@@ -6,17 +6,16 @@ import axios from 'axios';
 
 
 const QuizPoster = (props) => {
-    const quizDelete = (id) => {
-        axios.delete(`http://localhost:4000/delete/quiz/${id}`).then((response)=>{
-            console.log(response.message);
-        }).catch((exception)=>{
-            console.log(exception);
-        });
-        window.location.reload(true); 
+    const BASE_URL="https://quizbackend-faiu.onrender.com";
+    const quizDelete = async (id) => {
+        const response = await axios.delete(`${BASE_URL}/delete/quiz/${id}`);
+        if(response.status === 200){
+            window.location.reload(true);
+        }
       };
   return (
     <>
-        <div className='border-2 border-blue-500 w-full lg:w-96 py-1 rounded-lg bg-red-100' key={props._id}>
+        <div className='border-2 border-blue-500 w-full lg:w-2/5 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>
                         <h1 className='px-4 text-center text-xl font-bold uppercase'>

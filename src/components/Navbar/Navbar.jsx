@@ -9,7 +9,6 @@ const Navbar = () => {
         <QuizFormPopUp isOpen={quizFormOpen} setIsOpen={setQuizFormOpen} />
         <nav className='flex justify-evenly items-center py-1'>
             <div className='h-12 w-12 flex justify-center items-center'>
-                {/* <img src="" alt=""  className='w-full h-full'/> */}
                 <span className='text-xl font-bold text-white'>Logo</span>
             </div>
             <div>

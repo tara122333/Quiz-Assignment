@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
 import axios from 'axios'
@@ -7,13 +6,12 @@ import axios from 'axios'
 import UpdateQuestionDataPopUpModel from './UpdateQuestionData'
 
 const QuizQuestionPoster = (props) => {
-    const DeleteQuestion = (_id) => {
-        axios.delete(`http://localhost:4000/delete/quiz/question/${_id}`).then((response)=>{
-            console.log(response.message);
-        }).catch((exception)=>{
-            console.log(exception);
-        });
-        window.location.reload(true); 
+  const BASE_URL='https://quizbackend-faiu.onrender.com';
+    const DeleteQuestion = async(_id) => {
+        const response = await axios.delete(`${BASE_URL}/delete/quiz/question/${_id}`);
+        if(response.status === 200){
+            window.location.reload(true); 
+        }
     }
 
     const [quizQuestionOpen, setQuizQuestionOpen] = useState(false);

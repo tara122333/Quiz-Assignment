@@ -1,7 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
-import { useParams } from 'react-router-dom';
 
 
 export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
@@ -24,14 +23,11 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
         setQuestion((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    console.log(question);
-
-    const submit = () => {
-        axios.put(`http://localhost:4000/update/quiz/question/${_id}`,{question}).then((response) => {
-            console.log(response.questionData);
-        }).catch((exception)=>{
-          console.log(exception);
-        });
+    const submit = async() => {
+        const response = await axios.put(`http://localhost:4000/update/quiz/question/${_id}`,{question});
+        if(response.status === 200){
+            window.location.reload(true);
+        }
     };
 
   function closeModal() {
@@ -74,7 +70,7 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
                     Update Question
                   </Dialog.Title>
                   <div className="mt-4">
-                    <form className="w-full max-w-lg mx-auto" onSubmit={submit}>
+                    <form className="w-full max-w-lg mx-auto">
                         <div className="mb-4">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="questionName">
                             Question Name
@@ -313,12 +309,12 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
                             )
                         }
                         <div className="flex items-center justify-center">
-                            <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
+                            <div
+                            className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            onClick={()=> submit()}
                             >
                             Update
-                            </button>
+                            </div>
                         </div>
                     </form>
                   </div>

@@ -1,11 +1,11 @@
-// import Libraries
+// import nextConf from "../next.conf";
 import { Route,Routes } from "react-router-dom";
-
 // import Components
 import Quiz from "./components/Quiz/Quiz";
 import QuizEditing from "./components/QuizEditing/QuizEditing";
 import Question from "./components/Question/Question";
-import QuizQuestino from "./components/Question/QuizQuestion";
+
+
 function App() {
   return (
     <Routes>

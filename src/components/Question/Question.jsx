@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 
 
 const Question = () => {
-
+    const BASE_URL="https://quizbackend-faiu.onrender.com"
     const { _id } = useParams();
     const [questionData, setQuestionData] = useState([{
         questionName: '',
@@ -31,24 +31,47 @@ const Question = () => {
 
     const [time, setTime] = useState(0);
 
-    useEffect(() => {
-        axios.get(`http://localhost:4000/quiz/question/${_id}`).then((response) => {
-            setQuestionData(response.data.quizQuestionData.question);
-        }).catch((error) => {
-            console.log(error);
-        })
-        axios.get(`http://localhost:4000/quiz/${_id}`).then((response) => {
-            setQuizData(response.data.findQuiz);
-            setTime((response.data.findQuiz.timeLimit) * 60);
-        }).catch((error) => {
-            console.log(error);
-        })
+    // useEffect(() => {
+    //     axios.get(`http://localhost:4000/quiz/question/${_id}`).then((response) => {
+    //         setQuestionData(response.data.quizQuestionData.question);
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     })
+    //     axios.get(`http://localhost:4000/quiz/${_id}`).then((response) => {
+    //         setQuizData(response.data.findQuiz);
+    //         setTime((response.data.findQuiz.timeLimit) * 60);
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     })
 
+    //     const interval = setInterval(() => {
+    //         setTime(time => time - 1);
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // });
+
+    useEffect(()=>{
+        const fun = async()=>{
+            const response = await axios.get(`${BASE_URL}/quiz/question/${_id}`);
+            setQuestionData(response.data.quizQuestionData.question);
+        }
+        fun();
+    },[])
+
+    useEffect(()=>{
+        const fun = async()=>{
+            const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
+            setQuizData(response.data.findQuiz);
+            if(response.status === 200){
+                setTime((response.data.findQuiz.timeLimit) * 60);
+            }
+        }
+        fun();
         const interval = setInterval(() => {
             setTime(time => time - 1);
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    },[])
 
     const [questionIndex, setQuestionIndex] = useState(0, []);
     const [questionAnswerData, setQuestionAnswerData] = useState([{
