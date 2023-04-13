@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
 
 
 export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
@@ -26,7 +27,13 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
     const submit = async() => {
         const response = await axios.put(`http://localhost:4000/update/quiz/question/${_id}`,{question});
         if(response.status === 200){
-            window.location.reload(true);
+            // window.location.reload(true);
+            toast.success("Quiz Question Updated success");
+            closeModal()
+        }
+        else{
+            toast.error("Quiz Question Not Updated");
+
         }
     };
 
@@ -37,6 +44,8 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
 
   return (
     <>
+        <ToastContainer />
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

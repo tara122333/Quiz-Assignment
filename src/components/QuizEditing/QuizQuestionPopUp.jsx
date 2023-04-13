@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
@@ -32,7 +33,12 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     const submit = async() => {
         const response = await axios.post(`${BASE_URL}/createquestion/${_id}`,{question});
         if(response.status === 200){
-            window.location.reload(true);
+            // window.location.reload(true);
+            toast.success("Quiz Question Added Success");
+            closeModal();
+        }
+        else{
+            toast.success("Quiz Question Not Added");
         }
     };
 
@@ -43,6 +49,8 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
 
   return (
     <>
+    <ToastContainer />
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

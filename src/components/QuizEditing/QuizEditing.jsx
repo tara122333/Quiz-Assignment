@@ -9,6 +9,7 @@ import QuizQuestionPoster from './Question/QuizQuestionPoster';
 const QuizEditing = () => {
   const { _id } = useParams();
   const BASE_URL='https://quizbackend-faiu.onrender.com';
+
     const [questionData, setQuestionData] = useState([{
         questionName : '',
         option1 : '',
@@ -31,8 +32,6 @@ const QuizEditing = () => {
             timeLimit : '',
     });
 
-    
-
     useEffect(()=>{
         const functi = async()=>{
           const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
@@ -46,7 +45,10 @@ const QuizEditing = () => {
     useEffect(()=>{
       const fun = async()=>{
         const response = await axios.get(`${BASE_URL}/quiz/question/${_id}`);
+
+        if(response.status === 200){
           setQuestionData(response.data.quizQuestionData.question);
+        }
       }
       fun();
     });

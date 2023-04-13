@@ -4,13 +4,18 @@ import {MdOutlineEdit} from 'react-icons/md'
 import axios from 'axios'
 
 import UpdateQuestionDataPopUpModel from './UpdateQuestionData'
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const QuizQuestionPoster = (props) => {
   const BASE_URL='https://quizbackend-faiu.onrender.com';
     const DeleteQuestion = async(_id) => {
         const response = await axios.delete(`${BASE_URL}/delete/quiz/question/${_id}`);
         if(response.status === 200){
-            window.location.reload(true); 
+            toast.success("Quiz Question Delete success");
+        }
+        else{
+            toast.error("Quiz Question Not Delete");
         }
     }
 
@@ -19,6 +24,8 @@ const QuizQuestionPoster = (props) => {
     
   return (
     <>
+        <ToastContainer />
+
         <UpdateQuestionDataPopUpModel isOpen={quizQuestionOpen} setIsOpen={setQuizQuestionOpen} _id={props._id}/>
         <div className='border-2 border-blue-500 w-full lg:w-96 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>

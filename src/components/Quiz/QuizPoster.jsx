@@ -14,14 +14,14 @@ const QuizPoster = (props) => {
     const quizDelete = async (id) => {
         const response = await axios.delete(`${BASE_URL}/delete/quiz/${id}`);
         if(response.status === 200){
-            // window.location.reload(true);
+            toast.success("Quiz Delete success");
             const response = await axios.get(`${BASE_URL}/all`);
             setQuizadd(response.data.quizData);
-            toast.success("Quiz Delete success");
         }
         else{
             toast.error("Quiz Not Delete");
         }
+        
       };
   return (
     <>
