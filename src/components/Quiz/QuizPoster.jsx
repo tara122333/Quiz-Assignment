@@ -17,6 +17,7 @@ const QuizPoster = (props) => {
             toast.success("Quiz Delete success");
             const response = await axios.get(`${BASE_URL}/all`);
             setQuizadd(response.data.quizData);
+            console.log(quizadd);
         }
         else{
             toast.error("Quiz Not Delete");

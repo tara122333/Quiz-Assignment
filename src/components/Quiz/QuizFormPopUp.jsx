@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
