@@ -1,20 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
+import { addQuizData } from '../Context/Contextprovider';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const QuizPoster = (props) => {
     const BASE_URL="https://quizbackend-faiu.onrender.com";
+    const {quizadd , setQuizadd} = useContext(addQuizData);
+
     const quizDelete = async (id) => {
         const response = await axios.delete(`${BASE_URL}/delete/quiz/${id}`);
         if(response.status === 200){
-            window.location.reload(true);
+            // window.location.reload(true);
+            const response = await axios.get(`${BASE_URL}/all`);
+            setQuizadd(response.data.quizData);
+            toast.success("Quiz Delete success");
+        }
+        else{
+            toast.error("Quiz Not Delete");
         }
       };
   return (
     <>
+        <ToastContainer />
         <div className='border-2 border-blue-500 w-full lg:w-2/5 py-1 rounded-lg bg-red-100' key={props._id}>
                 <div className='flex justify-between items-center border-b-2 border-b-red-500 pb-1'>
                     <div className='px-2 lg:px-4'>

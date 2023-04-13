@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import QuizPoster from './QuizPoster'
 import Navbar from '../Navbar/Navbar'
+import { addQuizData } from '../Context/Contextprovider';
+
 
 const Quiz = () => {
     const BASE_URL="https://quizbackend-faiu.onrender.com"
-    const [formData, setFormData] = useState();
+
+    const {quizadd , setQuizadd} = useContext(addQuizData);
+
     useEffect(()=>{
         const fun = async() =>{
             const response = await axios.get(`${BASE_URL}/all`);
-            setFormData(response.data.quizData);
+            setQuizadd(response.data.quizData);
         };
         fun();
-    },[]);
+    });
     
   return (
     <>
@@ -21,7 +25,7 @@ const Quiz = () => {
         </div>
         <div className='py-8 w-full'>
             <div className='flex gap-6 flex-col flex-wrap justify-center lg:flex-row px-4 lg:px-24 '>
-                {formData && formData.map((item) => (
+                {quizadd && quizadd.map((item) => (
                         <QuizPoster {...item}/>
                 ))}
             </div>

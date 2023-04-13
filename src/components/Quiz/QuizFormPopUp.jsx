@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
 
@@ -18,6 +19,10 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
         setQuizData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    function closeModal() {
+      setIsOpen(false)
+    }
+
     const submit = async() => { 
       const response = await axios.post(`${BASE_URL}/create`, {quizData});
         if(response.status === 200){
@@ -27,15 +32,22 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
             pointsGradingSystem : '',
             timeLimit : '',
         })
-        window.location.reload(true);
+        
+        toast.success("Quiz Added Success");
+        closeModal();
+        // setQuizadd(response.data.quizAllData);
       }
+      else{
+        toast.error("Quiz Not Added");
+
+    }
+      // closeModal();
       };
 
-  function closeModal() {
-    setIsOpen(false)
-  }
+  
   return (
     <>
+    <ToastContainer />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -128,8 +140,7 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
                         <div className="flex items-center justify-center">
                             <div
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-                            onClick={()=> submit()}
-                            >
+                            onClick={()=> submit()}>
                             Create Quiz
                             </div>
                         </div>

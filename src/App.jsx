@@ -4,7 +4,7 @@ import { Route,Routes } from "react-router-dom";
 import Quiz from "./components/Quiz/Quiz";
 import QuizEditing from "./components/QuizEditing/QuizEditing";
 import Question from "./components/Question/Question";
-
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
