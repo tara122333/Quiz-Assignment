@@ -32,20 +32,23 @@ const Question = () => {
     const fun1 = async()=>{
         const response = await axios.get(`${BASE_URL}/quiz/${_id}`);
         setQuizData(response.data.findQuiz);
-        if(response.status === 200){
+        if(response.status === 200 && time === 0){
             setTime((response.data.findQuiz.timeLimit) * 60);
         }
         setSpiner(false);
     }
 
     useEffect(()=>{
-        
-        fun1();
+        fun1();   
+    });
+    
+    useEffect(()=>{
         const interval = setInterval(() => {
             setTime(time => time - 1);
+            
         }, 1000);
         return () => clearInterval(interval);
-    })
+    },[])
 
     const [questionIndex, setQuestionIndex] = useState(0, []);
     const [questionAnswerData, setQuestionAnswerData] = useState([{
@@ -122,8 +125,8 @@ const Question = () => {
                                 </>
                             ) : (
                                 <>
-                                    <div className='bg-red-600 h-12 w-full text-black flex items-center lg:justify-evenly '>
-                                        <div className=' px-2 lg:px-10 flex gap-2 lg:gap-10 items-center'>
+                                    <div className='bg-red-600 h-20 w-full text-black flex items-center justify-evenly flex-col md:flex-row gap-2 '>
+                                        <div className=' px-2 lg:px-10 flex gap-2 lg:gap-10 items-center justify-around lg:justify-center w-full lg:w-auto'>
                                             <h1 className='font-bold text-white text-lg lg:text-xl'>
                                                 {
                                                     quizData.quizName
