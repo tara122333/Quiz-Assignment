@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
@@ -24,6 +26,9 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
         marks : '',
     });
 
+    const [spiner, setSpiner] = useState(false);
+
+
     const handleSubmit = (e) => {
         setQuestion((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -31,15 +36,31 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     console.log(question);
 
     const submit = async() => {
+        setSpiner(true);
         const response = await axios.post(`${BASE_URL}/createquestion/${_id}`,{question});
         if(response.status === 200){
             // window.location.reload(true);
             toast.success("Quiz Question Added Success");
+            setQuestion({
+                questionName : '',
+                option1 : '',
+                option2 : '',
+                option3 : '',
+                option4 : '',
+                isMultipleAnswer : false,
+                answer : '',
+                answer1 : '',
+                answer2 : '',
+                answer3 : '',
+                answer4 : '',
+                marks : '',
+            })
             closeModal();
         }
         else{
             toast.success("Quiz Question Not Added");
         }
+        setSpiner(false);
     };
 
   function closeModal() {
@@ -327,7 +348,21 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
                             className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             onClick={()=> submit()}
                             >
-                            Submit
+                            {
+                                spiner ? (
+                                <>
+                                  <div className='w-full flex justify-center items-center'>
+                                    <Box sx={{ display: 'flex', color : "black" }}>
+                                        <CircularProgress />
+                                    </Box>
+                                  </div>
+                                </>
+                                ) : (
+                                <>
+                                  Submit
+                                </>
+                                )
+                              }
                             </div>
                         </div>
                     </form>

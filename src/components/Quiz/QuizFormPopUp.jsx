@@ -2,6 +2,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export default function QuizFormPopUp({isOpen,setIsOpen}) {
 
@@ -15,6 +17,8 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
         timeLimit : '',
     });
 
+    
+
     const handleSubmit = (e) => {
         setQuizData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
@@ -22,8 +26,10 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
     function closeModal() {
       setIsOpen(false)
     }
+    const [spiner, setSpiner] = useState(false);
 
     const submit = async() => { 
+      setSpiner(true);
       const response = await axios.post(`${BASE_URL}/create`, {quizData});
         if(response.status === 200){
           setQuizData({
@@ -39,9 +45,9 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
       }
       else{
         toast.error("Quiz Not Added");
-
     }
       // closeModal();
+        setSpiner(false);
       };
 
   
@@ -139,9 +145,24 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
                         </div>
                         <div className="flex items-center justify-center">
                             <div
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+                            className="bg-blue-500 w-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none flex justify-center items-center focus:shadow-outline cursor-pointer"
                             onClick={()=> submit()}>
-                            Create Quiz
+                              {
+                                spiner ? (
+                                <>
+                                  <div className='w-full flex justify-center items-center'>
+                                    <Box sx={{ display: 'flex', color : "black" }}>
+                                        <CircularProgress />
+                                    </Box>
+                                  </div>
+                                </>
+                                ) : (
+                                <>
+                                  Create Quiz
+                                </>
+                                )
+                              }
+                            
                             </div>
                         </div>
                     </form>

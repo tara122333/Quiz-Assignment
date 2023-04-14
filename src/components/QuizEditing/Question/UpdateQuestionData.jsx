@@ -2,7 +2,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { Fragment, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
     const [question, setQuestion] = useState({
@@ -20,21 +21,25 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
         marks : '',
     });
 
+    const [spiner, setSpiner] = useState(false);
+    const BASE_URL="https://quizbackend-faiu.onrender.com"
+
     const handleSubmit = (e) => {
         setQuestion((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const submit = async() => {
-        const response = await axios.put(`http://localhost:4000/update/quiz/question/${_id}`,{question});
+        setSpiner(true);
+        const response = await axios.put(`${BASE_URL}/update/quiz/question/${_id}`,{question});
         if(response.status === 200){
             // window.location.reload(true);
             toast.success("Quiz Question Updated success");
-            closeModal()
+            closeModal();
         }
         else{
             toast.error("Quiz Question Not Updated");
-
         }
+        setSpiner(false);
     };
 
   function closeModal() {
@@ -322,7 +327,21 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
                             className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             onClick={()=> submit()}
                             >
-                            Update
+                            {
+                                spiner ? (
+                                <>
+                                  <div className='w-full flex justify-center items-center'>
+                                    <Box sx={{ display: 'flex', color : "black" }}>
+                                        <CircularProgress />
+                                    </Box>
+                                  </div>
+                                </>
+                                ) : (
+                                <>
+                                  Update
+                                </>
+                                )
+                              }
                             </div>
                         </div>
                     </form>

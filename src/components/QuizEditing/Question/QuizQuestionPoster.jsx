@@ -2,14 +2,19 @@ import React, { useState } from 'react'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
 import axios from 'axios'
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import UpdateQuestionDataPopUpModel from './UpdateQuestionData'
 import { ToastContainer, toast } from 'react-toastify';
 
 
 const QuizQuestionPoster = (props) => {
   const BASE_URL='https://quizbackend-faiu.onrender.com';
+  const [spiner, setSpiner] = useState(false);
+
+
     const DeleteQuestion = async(_id) => {
+        setSpiner(true);
         const response = await axios.delete(`${BASE_URL}/delete/quiz/question/${_id}`);
         if(response.status === 200){
             toast.success("Quiz Question Delete success");
@@ -17,6 +22,7 @@ const QuizQuestionPoster = (props) => {
         else{
             toast.error("Quiz Question Not Delete");
         }
+        setSpiner(false);
     }
 
     const [quizQuestionOpen, setQuizQuestionOpen] = useState(false);
@@ -39,8 +45,21 @@ const QuizQuestionPoster = (props) => {
                             <MdOutlineEdit className='text-2xl hover:scale-125 duration-500'/>
                         </span>
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' onClick={()=> DeleteQuestion(props._id)}
-                        >
-                            <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
+                        >{
+                            spiner ? (
+                                    <>
+                                        <div>
+                                            <Box sx={{ height: 'flex' }}>
+                                                <CircularProgress />
+                                            </Box>
+                                        </div>
+                                    </>
+                            ) : (
+                                <>
+                                    <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
+                                </>
+                            )
+                        }
                         </span>
                     </div>
                 </div>

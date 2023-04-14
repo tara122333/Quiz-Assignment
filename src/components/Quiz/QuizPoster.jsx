@@ -1,17 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {AiOutlineDelete} from 'react-icons/ai'
 import {MdOutlineEdit} from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { addQuizData } from '../Context/Contextprovider';
 import { ToastContainer, toast } from 'react-toastify';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const QuizPoster = (props) => {
     const BASE_URL="https://quizbackend-faiu.onrender.com";
     const {quizadd , setQuizadd} = useContext(addQuizData);
 
+    const [spiner, setSpiner] = useState(false);
+
     const quizDelete = async (id) => {
+        setSpiner(true);
         const response = await axios.delete(`${BASE_URL}/delete/quiz/${id}`);
         if(response.status === 200){
             toast.success("Quiz Delete success");
@@ -22,7 +26,7 @@ const QuizPoster = (props) => {
         else{
             toast.error("Quiz Not Delete");
         }
-        
+        setSpiner(false);
       };
   return (
     <>
@@ -41,7 +45,21 @@ const QuizPoster = (props) => {
                         <span className='bg-red-500 px-4 text-white rounded-md py-1 md:py-2 cursor-pointer' 
                         onClick={() => quizDelete(props._id)}
                         >
-                            <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
+                            {
+                            spiner ? (
+                                    <>
+                                        <div>
+                                            <Box sx={{ height: 'flex' }}>
+                                                <CircularProgress />
+                                            </Box>
+                                        </div>
+                                    </>
+                            ) : (
+                                <>
+                                    <AiOutlineDelete className='text-2xl hover:scale-125 duration-500'/>
+                                </>
+                            )
+                        }
                         </span>
                     </div>
                 </div>
