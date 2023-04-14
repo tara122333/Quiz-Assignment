@@ -49,7 +49,7 @@ const Quiz = () => {
                             </div>
                         </>) : (<>
                                 <div>
-                                    No Quiz.. Add Quiz
+                                    No Quiz.. Add Quiz And Refresh Once
                                 </div>
                             </>)
                     }
