@@ -29,23 +29,37 @@ export default function QuizFormPopUp({isOpen,setIsOpen}) {
     const [spiner, setSpiner] = useState(false);
 
     const submit = async() => { 
-      setSpiner(true);
-      const response = await axios.post(`${BASE_URL}/create`, {quizData});
-        if(response.status === 200){
-          setQuizData({
-            quizName : '',
-            description : '',
-            pointsGradingSystem : '',
-            timeLimit : '',
-        })
-        
-        toast.success("Quiz Added Success");
-        closeModal();
-        // setQuizadd(response.data.quizAllData);
+      if(quizData.quizName === ''){
+        toast.error("Enter Quiz Name ");
+      }else if(quizData.description === ''){
+        toast.error("Enter Quiz description ");
+      }
+      else if(quizData.pointsGradingSystem === ''){
+        toast.error("Enter Quiz Points/Marks ");
+      }
+      else if(quizData.timeLimit === ''){
+        toast.error("Enter Quiz TimeLimit ");
       }
       else{
-        toast.error("Quiz Not Added");
-    }
+
+          setSpiner(true);
+          const response = await axios.post(`${BASE_URL}/create`, {quizData});
+            if(response.status === 200){
+              setQuizData({
+                quizName : '',
+                description : '',
+                pointsGradingSystem : '',
+                timeLimit : '',
+            })
+            
+            toast.success("Quiz Added Success");
+            closeModal();
+            // setQuizadd(response.data.quizAllData);
+          }
+          else{
+            toast.error("Quiz Not Added");
+        }
+      }
       // closeModal();
         setSpiner(false);
       };
