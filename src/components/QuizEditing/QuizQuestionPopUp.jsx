@@ -36,31 +36,61 @@ export default function QuizQuestionPopUpModel({isOpen, setIsOpen}) {
     console.log(question);
 
     const submit = async() => {
-        setSpiner(true);
-        const response = await axios.post(`${BASE_URL}/createquestion/${_id}`,{question});
-        if(response.status === 200){
-            // window.location.reload(true);
-            toast.success("Quiz Question Added Success");
-            setQuestion({
-                questionName : '',
-                option1 : '',
-                option2 : '',
-                option3 : '',
-                option4 : '',
-                isMultipleAnswer : false,
-                answer : '',
-                answer1 : '',
-                answer2 : '',
-                answer3 : '',
-                answer4 : '',
-                marks : '',
-            })
-            closeModal();
+        
+        if(question.questionName === ''){
+            toast.error("Enter question Name");
+        }
+        else if(question.option1 === ''){
+            toast.error("Enter option1");
+        }
+        else if(question.option2 === ''){
+            toast.error("Enter option2");
+        }
+        else if(question.option3 === ''){
+            toast.error("Enter option3");
+        }
+        else if(question.option4 === ''){
+            toast.error("Enter option4");
+        }
+        else if(question.marks === ''){
+            toast.error("Enter Marks");
+        }
+        else if(question.isMultipleAnswer === false){
+            if(question.answer === ''){
+                toast.error("select any one answer option ");
+            }
+        }else if(question.isMultipleAnswer === true){
+            if(question.answer1 === '' && question.answer2 === '' && question.answer3 === '' && question.answer4 === '' ){
+                toast.error("select minimum one answer option ");
+            }
         }
         else{
-            toast.success("Quiz Question Not Added");
+            setSpiner(true);
+            const response = await axios.post(`${BASE_URL}/createquestion/${_id}`,{question});
+            if(response.status === 200){
+                // window.location.reload(true);
+                toast.success("Quiz Question Added Success");
+                setQuestion({
+                    questionName : '',
+                    option1 : '',
+                    option2 : '',
+                    option3 : '',
+                    option4 : '',
+                    isMultipleAnswer : false,
+                    answer : '',
+                    answer1 : '',
+                    answer2 : '',
+                    answer3 : '',
+                    answer4 : '',
+                    marks : '',
+                })
+                closeModal();
+            }
+            else{
+                toast.success("Quiz Question Not Added");
+            }
+            setSpiner(false);
         }
-        setSpiner(false);
     };
 
   function closeModal() {
