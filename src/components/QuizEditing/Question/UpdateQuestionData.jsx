@@ -29,17 +29,45 @@ export default function UpdateQuestionDataPopUpModel({isOpen, setIsOpen,_id}) {
     };
 
     const submit = async() => {
-        setSpiner(true);
-        const response = await axios.put(`${BASE_URL}/update/quiz/question/${_id}`,{question});
-        if(response.status === 200){
-            // window.location.reload(true);
-            toast.success("Quiz Question Updated success");
-            closeModal();
+        if(question.questionName === ''){
+            toast.error("Enter question Name");
+        }
+        else if(question.option1 === ''){
+            toast.error("Enter option1");
+        }
+        else if(question.option2 === ''){
+            toast.error("Enter option2");
+        }
+        else if(question.option3 === ''){
+            toast.error("Enter option3");
+        }
+        else if(question.option4 === ''){
+            toast.error("Enter option4");
+        }
+        else if(question.marks === ''){
+            toast.error("Enter Marks");
+        }
+        else if(question.isMultipleAnswer === false){
+            if(question.answer === ''){
+                toast.error("select any one answer option ");
+            }
+        }else if(question.isMultipleAnswer === true){
+            if(question.answer1 === '' && question.answer2 === '' && question.answer3 === '' && question.answer4 === '' ){
+                toast.error("select minimum one answer option ");
+            }
         }
         else{
-            toast.error("Quiz Question Not Updated");
+            setSpiner(true);
+            const response = await axios.put(`${BASE_URL}/update/quiz/question/${_id}`,{question});
+            if(response.status === 200){
+                toast.success("Quiz Question Updated success");
+                closeModal();
+            }
+            else{
+                toast.error("Quiz Question Not Updated");
+            }
+            setSpiner(false);
         }
-        setSpiner(false);
     };
 
   function closeModal() {
